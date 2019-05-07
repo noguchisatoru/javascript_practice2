@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoリスト</title>
+</head>
+<body>
+    <h1>ToDoリスト</h1>
+
+    
+    <div>
+        <input type="radio" name="switch-display" id="all" checked>すべて
+        <input type="radio" name="switch-display" id="working">作業中
+        <input type="radio" name="switch-display" id="conplete">完了
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>コメント</th>
+                    <th>状態</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="todo-list">
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>新規タスクの追加</h2>
+        <input type="text" id="content">
+        <button id="add-button">追加</button>
+    </div>
+
+    <script type="text/javascript" src="main.js"></script>
+</body>
+</html>
