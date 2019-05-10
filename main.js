@@ -8,7 +8,7 @@ let content = document.getElementById('content');
 let todoList = document.getElementById('todo-list');
 
 const tr = document.createElement('tr');
-tr.id = 'list';
+tr.classList.add('list');
 
 //ID
 const tdId = document.createElement('td');
@@ -26,8 +26,8 @@ const tdWork = document.createElement('td');
 const btnWork = document.createElement('button');
 const textWork = document.createTextNode('作業中');
 
-tdWork.id = 'state';
-btnWork.id = 'work';
+tdWork.classList.add('state');
+btnWork.classList.add('work');
 btnWork.appendChild(textWork);
 tdWork.appendChild(btnWork);
 
@@ -53,18 +53,18 @@ tr.appendChild(remove);
  
 content.value = "";
 
-let btnWorking = document.getElementById('work');
+let btnWorking = document.getElementsByClassName('work');
     //完了に切り替え
     btnWorking.addEventListener('click', function(){
-        const target = document.getElementById('state');
-        const currentBtn = document.getElementById('work');
+        const target = document.getElementsByClassName('state');
+        const currentBtn = document.getElementsByClassName('work');
         const newBtn = document.createElement('button');
         newBtn.id = 'end';
         newBtn.textContent = '完了';
         target.replaceChild(newBtn, currentBtn);
     },false);
 
-    let btnRemoving = document.getElementById('remove');
+    let btnRemoving = document.getElementsByClassName('remove');
     //削除
     btnRemoving.addEventListener('click', function(){
         const listElement = document.querySelector('#list');
@@ -84,6 +84,6 @@ if(select === "all"){
 }else if(select === "working"){
 
 }else if(select === "conplete"){
-    
+
 }
 
