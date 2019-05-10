@@ -74,4 +74,16 @@ let btnWorking = document.getElementById('work');
 
 },false);
 
+let element = document.getElementById("radio-btn");
+
+let radioNodeList = element.switchDisplay;
+let select = radioNodeList.id;
+
+if(select === "all"){
+
+}else if(select === "working"){
+
+}else if(select === "conplete"){
+    
+}
 
