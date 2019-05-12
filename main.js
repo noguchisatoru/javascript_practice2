@@ -53,37 +53,61 @@ tr.appendChild(remove);
  
 content.value = "";
 
-let btnWorking = document.getElementsByClassName('work');
-    //完了に切り替え
-    btnWorking.addEventListener('click', function(){
-        const target = document.getElementsByClassName('state');
-        const currentBtn = document.getElementsByClassName('work');
-        const newBtn = document.createElement('button');
-        newBtn.id = 'end';
-        newBtn.textContent = '完了';
-        target.replaceChild(newBtn, currentBtn);
+    
+    btnWork.addEventListener('click', function(){
+        //完了に切り替え
+        if(btnWork.classList.value === "work"){
+            btnWork.classList.value = "end";
+            btnWork.textContent = "完了";
+        }else if(btnWork.classList.value === "end"){
+            //作業中に切り替え
+            btnWork.classList.value = "work";
+            btnWork.textContent = "作業中";
+        }
     },false);
 
-    let btnRemoving = document.getElementsByClassName('remove');
     //削除
-    btnRemoving.addEventListener('click', function(){
-        const listElement = document.querySelector('#list');
+    btnRemove.addEventListener('click', function(){
+        const listElement = document.querySelector('.list');
         listElement.remove();
     },false);
 
 
 },false);
 
-let element = document.getElementById("radio-btn");
+let element = document.getElementById("radioBtn");
 
-let radioNodeList = element.switchDisplay;
-let select = radioNodeList.id;
+element.addEventListener('change',function(){
+    
+    let radioNodeList = element["switchDisplay"];
+    let select = radioNodeList.value;
+    let allList = document.getElementsByClassName("state");
+    console.log(allList);
+    if(select === "all"){
+        for(let j = 0; j < allList.length; j++){
+            if(allList[j].childNodes[0].className === "work"){
+                allList[j].parentNode.style.visibility="visible";
+            }else{
+                allList[j].parentNode.style.visibility="visible";
+            }
+        }
+    }else if(select === "working"){
+        for(let j = 0; j < allList.length; j++){
+            if(allList[j].childNodes[0].className === "work"){
+                allList[j].parentNode.style.visibility="visible";
+            }else{
+                allList[j].parentNode.style.visibility="hidden";
+            }
+        }
+    }else if(select === "complete"){
+        for(let j = 0; j < allList.length; j++){
+            if(allList[j].childNodes[0].className === "work"){
+                allList[j].parentNode.style.visibility="hidden";
+            }else{
+                allList[j].parentNode.style.visibility="visible";
+            }
+        }
+    }
+},false);
 
-if(select === "all"){
-
-}else if(select === "working"){
-
-}else if(select === "conplete"){
-
-}
 
