@@ -1,3 +1,22 @@
+class Task{
+    constructor(id,comment,status){
+        this._id = id;
+        this._comment = comment;
+        this._status = status;
+    }
+    get id(){
+        return this._id;
+    }
+
+    get comment(){
+        return this._comment;
+    }
+
+    get status(){
+        return this._status;
+    }
+}
+
 const btnAdd = document.getElementById('add-button');
 const content = document.getElementById('content');
 const todoList = document.getElementById('todo-list');
@@ -5,26 +24,35 @@ const element = document.getElementById("radioBtn");
 
 //ID用の変数の初期化
 let index = 0;
+let removeIds = [];
+let taskId = index;
 
 btnAdd.addEventListener('click', function () {
+    if(removeIds.length === 0){
+        taskId = index;
+    }else{
+        taskId = removeIds[0];
+        removeIds.shift();
+    }
+    let task = new Task(taskId, content.value, 'work');
 
     const tr = document.createElement('tr');
     tr.classList.add('list');
 
     //IDの生成
     const tdId = document.createElement('td');
-    tdId.textContent = index;
+    tdId.textContent = task.id;
 
     //コメントの生成
     const tdComment = document.createElement('td');
-    tdComment.textContent = content.value;
+    tdComment.textContent = task.comment;
 
     //作業中ボタンの生成
     const tdWork = document.createElement('td');
     tdWork.classList.add('state');
     const btnWork = document.createElement('button');
     btnWork.textContent = '作業中';
-    btnWork.classList.add('work');
+    btnWork.classList.add(task.status);
     btnWork.addEventListener('click', function () {
         //完了に切り替え
         if (btnWork.classList.value === "work") {
@@ -43,8 +71,16 @@ btnAdd.addEventListener('click', function () {
     btnRemove.id = 'remove';
     btnRemove.textContent = '削除';
     btnRemove.addEventListener('click', function () {
-        //削除処理
+        //削除処理   
+        removeIds.push(Number(tdId.textContent));
+        //並び替え
+        removeIds.sort(function(a,b){
+            if( a < b ) return -1;
+            if( a > b ) return 1;
+            return 0;
+        });
         this.parentNode.parentNode.remove();
+        index--;
     });
 
     //表示
@@ -125,5 +161,8 @@ element.addEventListener('change', function () {
     }
             */
 });
+
+
+
 
 
