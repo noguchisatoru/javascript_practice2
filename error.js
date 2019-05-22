@@ -47,7 +47,7 @@ const element = document.getElementById("radioBtn");
 
 //インスタンス生成
 let task = new Task();
-let tasks = [];
+//let tasks = [];
 
 
 //ID用の変数の初期化
@@ -72,9 +72,10 @@ btnAdd.addEventListener('click', function () {
     taskData.id = task.id;
     taskData.comment = task.comment;
     taskData.status = task.status;
-    tasks.push(taskData);
+    console.log(task.tasks);
+    task.tasks.push(taskData);
 
-    tasks.sort(function(a,b){
+    task.tasks.sort(function(a,b){
         if( a.id < b.id ) return -1;
         if( a.id > b.id ) return 1;
         return 0;
@@ -132,7 +133,7 @@ let refleshDisplay = () => {
         todoList.removeChild(todoList.firstChild);
     }
     //描写
-    tasks.forEach((task) => {
+    task.tasks.forEach((task) => {
         const tr = document.createElement('tr');
         tr.classList.add('list');
 
@@ -158,13 +159,13 @@ let refleshDisplay = () => {
         btnWork.addEventListener('click', function () {
             //完了に切り替え
             if (btnWork.classList.value === "work") {
-                tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "end";
+                task.tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "end";
                 console.log(tasks);
                 btnWork.classList.value = "end";
                 btnWork.textContent = "完了";
             } else if (btnWork.classList.value === "end") {
                 //作業中に切り替え
-                tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "work";
+                task.tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "work";
                 btnWork.classList.value = "work";
                 btnWork.textContent = "作業中";
             }
@@ -185,16 +186,15 @@ let refleshDisplay = () => {
                 if( a > b ) return 1;
                 return 0;
             });
-            tasks.sort(function(a,b){
+            task.tasks.sort(function(a,b){
                 if( a.id < b.id ) return -1;
                 if( a.id > b.id ) return 1;
                 return 0;
             })
-            
-            tasks.splice(this.parentNode.parentNode.childNodes[0].textContent - counter,1);
+            console.log(task.tasks);
+            task.tasks.splice(this.parentNode.parentNode.childNodes[0].textContent - counter,1);
             counter++;
             index--;
-            console.log(tasks);
             this.parentNode.parentNode.remove();
             
         });
