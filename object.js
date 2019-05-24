@@ -1,10 +1,9 @@
 class Task{
     constructor(){
-        //this._tasksがうごかない（any型）
-        this._tasks = [];
-        this._id = "";
-        this._comment = "";
-        this._status = "";
+        this.tasks = [];
+        this.id = "";
+        this.comment = "";
+        this.status = "";
     }
 
     get id(){
@@ -47,7 +46,7 @@ const element = document.getElementById("radioBtn");
 
 //インスタンス生成
 let task = new Task();
-let tasks = [];
+//let tasks = [];
 
 
 //ID用の変数の初期化
@@ -72,9 +71,9 @@ btnAdd.addEventListener('click', function () {
     taskData.id = task.id;
     taskData.comment = task.comment;
     taskData.status = task.status;
-    tasks.push(taskData);
+    task.tasks.push(taskData);
 
-    tasks.sort(function(a,b){
+    task.tasks.sort(function(a,b){
         if( a.id < b.id ) return -1;
         if( a.id > b.id ) return 1;
         return 0;
@@ -132,23 +131,23 @@ let refleshDisplay = () => {
         todoList.removeChild(todoList.firstChild);
     }
     //描写
-    tasks.forEach((task) => {
+    task.tasks.forEach((el) => {
         const tr = document.createElement('tr');
         tr.classList.add('list');
 
         //IDの生成
         const tdId = document.createElement('td');
-        tdId.textContent = task.id;
+        tdId.textContent = el.id;
 
         //コメントの生成
         const tdComment = document.createElement('td');
-        tdComment.textContent = task.comment;
+        tdComment.textContent = el.comment;
 
         //作業中ボタンの生成
         const tdWork = document.createElement('td');
         tdWork.classList.add('state');
         const btnWork = document.createElement('button');
-        btnWork.classList.add(task.status);
+        btnWork.classList.add(el.status);
         if (btnWork.classList.value === "work") {
             btnWork.textContent = "作業中";
         } else if (btnWork.classList.value === "end") {
@@ -158,13 +157,12 @@ let refleshDisplay = () => {
         btnWork.addEventListener('click', function () {
             //完了に切り替え
             if (btnWork.classList.value === "work") {
-                tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "end";
-                console.log(tasks);
+                task.tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "end";
                 btnWork.classList.value = "end";
                 btnWork.textContent = "完了";
             } else if (btnWork.classList.value === "end") {
                 //作業中に切り替え
-                tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "work";
+                task.tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "work";
                 btnWork.classList.value = "work";
                 btnWork.textContent = "作業中";
             }
@@ -185,16 +183,15 @@ let refleshDisplay = () => {
                 if( a > b ) return 1;
                 return 0;
             });
-            tasks.sort(function(a,b){
+            task.tasks.sort(function(a,b){
                 if( a.id < b.id ) return -1;
                 if( a.id > b.id ) return 1;
                 return 0;
             })
             
-            tasks.splice(this.parentNode.parentNode.childNodes[0].textContent - counter,1);
+            task.tasks.splice(this.parentNode.parentNode.childNodes[0].textContent - counter,1);
             counter++;
             index--;
-            console.log(tasks);
             this.parentNode.parentNode.remove();
             
         });
