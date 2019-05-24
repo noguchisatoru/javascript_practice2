@@ -86,8 +86,8 @@ btnAdd.addEventListener('click', function () {
     index++;
 
     refleshDisplay();
-    
-    
+
+
 
 });
 
@@ -157,12 +157,12 @@ let refleshDisplay = () => {
         btnWork.addEventListener('click', function () {
             //完了に切り替え
             if (btnWork.classList.value === "work") {
-                task.tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "end";
+                task.tasks[(this.parentNode.parentNode.childNodes[0].textContent) - counter].status = "end";
                 btnWork.classList.value = "end";
                 btnWork.textContent = "完了";
             } else if (btnWork.classList.value === "end") {
                 //作業中に切り替え
-                task.tasks[this.parentNode.parentNode.childNodes[0].textContent].status = "work";
+                task.tasks[(this.parentNode.parentNode.childNodes[0].textContent) - counter].status = "work";
                 btnWork.classList.value = "work";
                 btnWork.textContent = "作業中";
             }
@@ -174,7 +174,7 @@ let refleshDisplay = () => {
         btnRemove.id = 'remove';
         btnRemove.textContent = '削除';
         btnRemove.addEventListener('click', function () {
-            
+
             //削除処理   
             removeIds.push(Number(tdId.textContent));
             //並び替え
@@ -188,12 +188,12 @@ let refleshDisplay = () => {
                 if( a.id > b.id ) return 1;
                 return 0;
             })
-            
+
             task.tasks.splice(this.parentNode.parentNode.childNodes[0].textContent - counter,1);
             counter++;
             index--;
             this.parentNode.parentNode.remove();
-            
+
         });
 
         //表示
@@ -206,8 +206,3 @@ let refleshDisplay = () => {
         todoList.appendChild(tr);
     })
 }
-
-
-
-
-
