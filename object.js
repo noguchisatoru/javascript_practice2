@@ -38,7 +38,6 @@ class Task{
         this._tasks = value;
     }
 }
-
 const btnAdd = document.getElementById('add-button');
 const content = document.getElementById('content');
 const todoList = document.getElementById('todo-list');
@@ -46,24 +45,24 @@ const element = document.getElementById("radioBtn");
 
 //インスタンス生成
 let task = new Task();
-//let tasks = [];
-
-
 //ID用の変数の初期化
 let index = 0;
+//削除したときに配列のズレを修正する用
 let counter = 0;
+//削除したIDを保管
 let removeIds = [];
-let taskId = index;
+//ラジオボタンの選択を取得
+const radioNodeList = element["switchDisplay"]
+let select = radioNodeList.value;
 
 btnAdd.addEventListener('click', function () {
     if(removeIds.length === 0){
-        taskId = index;
+        task.id = index;
     }else{
-        taskId = removeIds[0];
+        task.id = removeIds[0];
         removeIds.shift();
     }
 
-    task.id = taskId;
     task.comment = content.value;
     task.status = "work";
 
@@ -72,10 +71,11 @@ btnAdd.addEventListener('click', function () {
     taskData.comment = task.comment;
     taskData.status = task.status;
     task.tasks.push(taskData);
+    
 
     task.tasks.sort(function(a,b){
-        if( a.id < b.id ) return -1;
-        if( a.id > b.id ) return 1;
+        if(a.id < b.id) return -1;
+        if(a.id > b.id) return 1;
         return 0;
     })
 
@@ -84,48 +84,17 @@ btnAdd.addEventListener('click', function () {
         counter--;
     }
     index++;
-
-    refleshDisplay();
-
-
-
+    
+    refleshDisplay(select);
 });
 
-element.addEventListener('change', function () {
+element.addEventListener("change", function () {
+    select = radioNodeList.value;
 
-    const radioNodeList = element["switchDisplay"];
-    const select = radioNodeList.value;
-    const allList = document.getElementsByClassName("state");
-
-    if (select === "all") {
-        for (let j = 0; j < allList.length; j++) {
-            if (allList[j].childNodes[0].className === "work") {
-                allList[j].parentNode.style.display = "";
-            } else {
-                allList[j].parentNode.style.display = "";
-            }
-        }
-    } else if (select === "working") {
-        for (let j = 0; j < allList.length; j++) {
-            if (allList[j].childNodes[0].className === "work") {
-                allList[j].parentNode.style.display = "";
-            } else {
-                allList[j].parentNode.style.display = "none";
-            }
-        }
-    } else if (select === "complete") {
-        for (let j = 0; j < allList.length; j++) {
-            if (allList[j].childNodes[0].className === "work") {
-                allList[j].parentNode.style.display = "none";
-            } else {
-                allList[j].parentNode.style.display = "";
-            }
-        }
-    }
-
+    refleshDisplay(select);
 });
 
-let refleshDisplay = () => {
+let refleshDisplay = (test) => {
     //リセット
     while(todoList.firstChild){
         todoList.removeChild(todoList.firstChild);
@@ -192,17 +161,39 @@ let refleshDisplay = () => {
             task.tasks.splice(this.parentNode.parentNode.childNodes[0].textContent - counter,1);
             counter++;
             index--;
-            this.parentNode.parentNode.remove();
+            refleshDisplay(select);
 
         });
 
         //表示
-        tdWork.appendChild(btnWork);
-        tdRemove.appendChild(btnRemove);
-        tr.appendChild(tdId);
-        tr.appendChild(tdComment);
-        tr.appendChild(tdWork);
-        tr.appendChild(tdRemove);
-        todoList.appendChild(tr);
+        if (test === "all") {
+            tdWork.appendChild(btnWork);
+            tdRemove.appendChild(btnRemove);
+            tr.appendChild(tdId);
+            tr.appendChild(tdComment);
+            tr.appendChild(tdWork);
+            tr.appendChild(tdRemove);
+            todoList.appendChild(tr);
+        } else if(test === "working"){
+            if(btnWork.classList.value === "work"){
+                tdWork.appendChild(btnWork);
+                tdRemove.appendChild(btnRemove);
+                tr.appendChild(tdId);
+                tr.appendChild(tdComment);
+                tr.appendChild(tdWork);
+                tr.appendChild(tdRemove);
+                todoList.appendChild(tr);
+            }
+        }else{
+            if(btnWork.classList.value === "end"){
+                tdWork.appendChild(btnWork);
+                tdRemove.appendChild(btnRemove);
+                tr.appendChild(tdId);
+                tr.appendChild(tdComment);
+                tr.appendChild(tdWork);
+                tr.appendChild(tdRemove);
+                todoList.appendChild(tr);
+            }
+        }
     })
 }
