@@ -1,42 +1,21 @@
 class Task{
     constructor(){
         this.tasks = [];
-        this.id = "";
-        this.comment = "";
-        this.status = "";
+    }
+    //taskデータを取得
+    setTasks(comment, status){
+        const task = [];
+        
+        task.comment = comment;
+        task.status = status;
+
+        this.tasks.push(task);
+    }
+    //taskデータを渡す
+    getTasks(){
+        return this.tasks;
     }
 
-    get id(){
-        return this._id;
-    }
-
-    set id(value){
-        this._id = value;
-    }
-
-    get comment(){
-        return this._comment;
-    }
-
-    set comment(value){
-        this._comment = value;
-    }
-
-    get status(){
-        return this._status;
-    }
-
-    set status(value){
-        this._status = value;
-    }
-
-    get tasks(){
-        return this._tasks;
-    }
-
-    set tasks(value){
-        this._tasks = value;
-    }
 }
 const btnAdd = document.getElementById('add-button');
 const content = document.getElementById('content');
@@ -47,66 +26,43 @@ const element = document.getElementById("radioBtn");
 let task = new Task();
 //ID用の変数の初期化
 let index = 0;
-//削除したときに配列のズレを修正する用
-let counter = 0;
-//削除したIDを保管
-let removeIds = [];
 //ラジオボタンの選択を取得
 const radioNodeList = element["switchDisplay"]
+//選択されている状態のデータを取得
 let select = radioNodeList.value;
 
+//追加ボタンを押された
 btnAdd.addEventListener('click', function () {
-    if(removeIds.length === 0){
-        task.id = index;
-    }else{
-        task.id = removeIds[0];
-        removeIds.shift();
-    }
-
-    task.comment = content.value;
-    task.status = "work";
-
-    let taskData = {};
-    taskData.id = task.id;
-    taskData.comment = task.comment;
-    taskData.status = task.status;
-    task.tasks.push(taskData);
-    
-
-    task.tasks.sort(function(a,b){
-        if(a.id < b.id) return -1;
-        if(a.id > b.id) return 1;
-        return 0;
-    })
+    task.setTasks(content.value, "work");
 
     content.value = "";
-    if(counter > 0){
-        counter--;
-    }
-    index++;
     
     refleshDisplay(select);
 });
 
+//radioボタンが変わったとき
 element.addEventListener("change", function () {
     select = radioNodeList.value;
 
     refleshDisplay(select);
 });
 
-let refleshDisplay = (test) => {
+//taskの表示
+let refleshDisplay = (mode) => {
     //リセット
     while(todoList.firstChild){
         todoList.removeChild(todoList.firstChild);
     }
+    //taskデータを取得
+    const tasks = task.getTasks();
     //描写
-    task.tasks.forEach((el) => {
+    tasks.forEach((el, index) => {
         const tr = document.createElement('tr');
         tr.classList.add('list');
 
         //IDの生成
         const tdId = document.createElement('td');
-        tdId.textContent = el.id;
+        tdId.textContent = index;
 
         //コメントの生成
         const tdComment = document.createElement('td');
@@ -123,15 +79,16 @@ let refleshDisplay = (test) => {
             btnWork.textContent = "完了";
         }
 
+        //作業中or完了ボタンが押されたとき
         btnWork.addEventListener('click', function () {
-            //完了に切り替え
             if (btnWork.classList.value === "work") {
-                task.tasks[(this.parentNode.parentNode.childNodes[0].textContent) - counter].status = "end";
+                //完了に切り替え
+                tasks[(this.parentNode.parentNode.childNodes[0].textContent) ].status = "end";
                 btnWork.classList.value = "end";
                 btnWork.textContent = "完了";
             } else if (btnWork.classList.value === "end") {
                 //作業中に切り替え
-                task.tasks[(this.parentNode.parentNode.childNodes[0].textContent) - counter].status = "work";
+                tasks[(this.parentNode.parentNode.childNodes[0].textContent) ].status = "work";
                 btnWork.classList.value = "work";
                 btnWork.textContent = "作業中";
             }
@@ -142,31 +99,15 @@ let refleshDisplay = (test) => {
         const btnRemove = document.createElement('button');
         btnRemove.id = 'remove';
         btnRemove.textContent = '削除';
+        //削除ボタンが押されたとき
         btnRemove.addEventListener('click', function () {
-
-            //削除処理   
-            removeIds.push(Number(tdId.textContent));
-            //並び替え
-            removeIds.sort(function(a,b){
-                if( a < b ) return -1;
-                if( a > b ) return 1;
-                return 0;
-            });
-            task.tasks.sort(function(a,b){
-                if( a.id < b.id ) return -1;
-                if( a.id > b.id ) return 1;
-                return 0;
-            })
-
-            task.tasks.splice(this.parentNode.parentNode.childNodes[0].textContent - counter,1);
-            counter++;
+            tasks.splice(this.parentNode.parentNode.childNodes[0].textContent,1);
             index--;
             refleshDisplay(select);
-
         });
 
         //表示
-        if (test === "all") {
+        if (mode === "all") {
             tdWork.appendChild(btnWork);
             tdRemove.appendChild(btnRemove);
             tr.appendChild(tdId);
@@ -174,7 +115,7 @@ let refleshDisplay = (test) => {
             tr.appendChild(tdWork);
             tr.appendChild(tdRemove);
             todoList.appendChild(tr);
-        } else if(test === "working"){
+        } else if(mode === "working"){
             if(btnWork.classList.value === "work"){
                 tdWork.appendChild(btnWork);
                 tdRemove.appendChild(btnRemove);
