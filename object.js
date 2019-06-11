@@ -48,7 +48,7 @@ element.addEventListener("change", function () {
 });
 
 //taskの表示
-let refleshDisplay = (mode) => {
+const refleshDisplay = (mode) => {
     //リセット
     while(todoList.firstChild){
         todoList.removeChild(todoList.firstChild);
